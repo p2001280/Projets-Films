@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+	<meta charset="utf-8">
+	<title>My first three.js app</title>
+	<style>
+	 body { margin: 0; }
+	 canvas { width: 100%; height: 90% }
+	 #toolbar { color: white; position: absolute; }
+	 #toolbar a { color: lightgrey; }
+	 #toolbar a:hover { text-decoration: none; }
+	</style>
+    </head>
+    <body>
+	<p id="toolbar">
+	    <a href="https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene">Documentation</a>
+	    <a href="mailto:adrien.peytavie@liris.cnrs.fr">adrien.peytavie@liris.cnrs.fr</a>
+	</p>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.js"></script>
+	<script>
+	 // Initialisation of the scene / camera / renderer
+	 var scene = new THREE.Scene();
+	 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+	 var renderer = new THREE.WebGLRenderer();
+	 var light = new THREE.Light(0x888888);
+	//  var earthGeometry = new THREE.SphereGeometry(5,5,50);
+
+
+	 renderer.setSize( window.innerWidth, window.innerHeight );
+	 renderer.shadowMap.enabled = true;
+	 document.body.appendChild( renderer.domElement );
+	 camera.position.z = 55;
+	 camera.position.y = 30;
+	 camera.rotation.x = -0.5;
+	 light.position.set(20,10,20);
+
+
+
+	 
+	 // Initialisation of your objects / materials / light
+	 var solarSystem = new THREE.Object3D();
+	 scene.add(solarSystem);
+	 scene.add(light);
+	 var ball = new THREE.SphereGeometry(1, 32, 32);
+	 var sunMaterial = ({
+		 map: new THREE.ImageUtils.loadTexture("terre.png"),
+		 side: THREE.DoubleSide,
+		 shininess: 0
+	 });
+	 var earthMaterial = new THREE.MeshBasicMaterial( { color: 0x0080ff } );
+	 var moonMaterial = new THREE.MeshBasicMaterial({color:0xFFFFFF});
+ 	 var venusMaterial = new THREE.MeshBasicMaterial( { color: 0xff7f00} ) ;
+
+	  
+	//  var saturnMaterial = new THREE.MeshBasicMaterial( {color : 0xC5AB6E} );
+	//  var plutonMaterial = new THREE.MeshBasicMaterial( {color : 0xf6ba7c });
+	//  var jupiterMaterial = new THREE.MeshBasicMaterial( {color : 0x99cc00 });
+	 
+	
+	 var sun = new THREE.Mesh(ball, sunMaterial);
+	 var earth = new THREE.Mesh(ball, earthMaterial);
+	 var moon = new THREE.Mesh(ball, moonMaterial);
+	 var venus = new THREE.Mesh(ball, venusMaterial);
+	//  var saturn = new THREE.Mesh(ball, saturnMaterial);
+	//  var jupiter = new THREE.Mesh(ball, jupiterMaterial);
+
+	 var pi = Math.PI;
+	 var earthAngle = pi/4;
+	 var moonAngle = pi/6;
+	 var venusAngle = pi;
+	//  var saturnAngle = pi/2;
+	//  var jupiterAngle = pi/6;
+	 //  var pluton = new THREE.Mesh(ball, plutonMaterial);
+
+
+
+	 sun.scale.set(8, 8, 8);
+	 earth.scale.set(3, 3, 3);
+	 moon.scale.set(2,2,2);
+	 venus.scale.set(3, 3, 3);
+	//  saturn.scale.set(2,2,2);
+	//  pluton.scale.set(1,1,1,1);
+	//  jupiter.scale.set(1,1,1,1);
+
+
+
+	 solarSystem.add(sun);
+	 solarSystem.add(earth);
+	 solarSystem.add(venus);
+	 solarSystem.add(moon);
+	//  solarSystem.add(saturn);
+	//  solarSystem.add(jupiter);
+	//  solarSystem.add(venus);
+
+
+	 
+	 // This is executed for each frames
+	 function render() {
+	    requestAnimationFrame( render );
+	    // Animation code goes here
+		earthAngle += 0.03;
+		moonAngle += 0.03;
+		venusAngle += 0.03;
+		// saturnAngle += 0.05;
+		// jupiterAngle += 0.05;
+
+	    sun.position.x = 0;
+		sun.position.y = 0;
+
+		earth.position.x = Math.cos(earthAngle)*26;
+		earth.position.z = Math.sin(earthAngle)*26;
+
+		moon.position.x = Math.cos(moonAngle)*26;
+		moon.position.z = Math.sin(moonAngle)*26;
+		
+		venus.position.x = Math.cos(venusAngle)*26;
+		venus.position.z = Math.sin(venusAngle)*26;
+
+		// saturn.position.x = Math.cos(venusAngle)*16;
+		// saturn.position.y = Math.sin(venusAngle)*16;
+
+		// jupiter.position.x = Math.cos(jupiterAngle)*10;
+		// jupiter.position.y = Math.sin	(jupiterAngle)*10;
+	    renderer.render( scene, camera );
+	 }  
+	 render();
+	</script>
+    </body>
+</html>
